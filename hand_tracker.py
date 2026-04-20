@@ -1,6 +1,5 @@
 import cv2
 import mediapipe as mp
-import numpy as np
 
 class HandTracker:
     def __init__(self):
@@ -8,8 +7,9 @@ class HandTracker:
         self.hands = self.mp_hands.Hands(
             static_image_mode=False,
             max_num_hands=1,
-            min_detection_confidence=0.7,
-            min_tracking_confidence=0.7
+            min_detection_confidence=0.5,
+            min_tracking_confidence=0.5,
+            model_complexity=0
         )
         self.mp_draw = mp.solutions.drawing_utils
         self.prev_x = None
@@ -27,7 +27,6 @@ class HandTracker:
                 frame, hand, self.mp_hands.HAND_CONNECTIONS
             )
 
-            # Get wrist position (landmark 0)
             wrist = hand.landmark[0]
             curr_x = wrist.x * w
             curr_y = wrist.y * h
@@ -36,7 +35,6 @@ class HandTracker:
                 dx = curr_x - self.prev_x
                 dy = curr_y - self.prev_y
 
-                # Gesture detection based on movement
                 if abs(dx) > abs(dy):
                     if dx > 30:
                         gesture = "RIGHT"
@@ -48,7 +46,6 @@ class HandTracker:
                     elif dy > 30:
                         gesture = "DOWN"
 
-                # Show gesture on frame
                 if gesture:
                     cv2.putText(frame, f"Gesture: {gesture}",
                                 (10, 50), cv2.FONT_HERSHEY_SIMPLEX,

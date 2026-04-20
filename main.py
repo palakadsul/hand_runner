@@ -10,6 +10,8 @@ def main():
 
     # Open webcam
     cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)   # was 640
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)  # was 480
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
